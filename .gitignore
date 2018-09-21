@@ -6,3 +6,5 @@ build/
 
 # dotenv environment variables file
 .env
+
+assets/

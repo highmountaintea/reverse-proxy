@@ -67,7 +67,7 @@ var server = https.createServer(options, function(req, res) {
 	};
 	
   req.headers['X-Forwarded-Proto'] = 'https';
-  let address = addressMap(req.headers.host);
+  let address = addressMap[req.headers.host];
   if (address == null) {
     logger.info({ url: req.url }, 'Invalid host: %s', req.headers.host);
     res.writeHead(500);

@@ -1,0 +1,26 @@
+{
+  "name": "reverse-proxy",
+  "version": "0.1.0",
+  "description": "HTTPS reverse proxy - alternative when too lazy to install NGINX properly",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/highmountaintea/reverse-proxy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/highmountaintea/reverse-proxy/issues"
+  },
+  "homepage": "https://github.com/highmountaintea/reverse-proxy#readme",
+  "dependencies": {
+    "bunyan": "^1.8.12",
+    "bunyan-loggly": "^1.3.5",
+    "dotenv": "^6.0.0",
+    "http-proxy": "^1.17.0",
+    "https": "^1.0.0"
+  }
+}

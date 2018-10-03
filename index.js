@@ -79,5 +79,21 @@ var server = https.createServer(options, function(req, res) {
   }
 });
 
-console.log("listening on port 443")
+server.on('upgrade', function (req, socket, head) {
+	logger.info({ host: req.headers.host, url: req.url, headers: req.headers,
+		ip: req.connection.remoteAddress },
+		'ws request: %s %s', req.headers.host, req.url);
+
+  // req.headers['X-Forwarded-Proto'] = 'https';
+  let address = addressMap[req.headers.host];
+  if (address == null) {
+		logger.info({ url: req.url }, 'Invalid ws host: %s', req.headers.host);
+		socket.close();
+  } else {
+		proxy.ws(req, socket, head, { target: address.replace('http://', 'ws://') });
+		logger.info({ url: req.url }, 'Proxied ws %s', req.headers.host);
+  }
+});
+
+console.log("listening on port 443");
 server.listen(443);

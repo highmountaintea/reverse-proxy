@@ -1,6 +1,7 @@
 require('dotenv').config();
 const https = require('https');
 const httpProxy = require('http-proxy');
+const serveStatic = require('serve-static');
 const url = require("url");
 const fs = require('fs');
 const bunyan = require('bunyan');
@@ -33,6 +34,7 @@ let logger = bunyan.createLogger({
   
 logger.info('logger started');
 
+let staticServers = {};
 
 var options = {
   key: fs.readFileSync('assets/ssl.key'),
@@ -73,9 +75,20 @@ var server = https.createServer(options, function(req, res) {
     res.writeHead(500);
     res.end('Not found');
   } else {
-    proxy.web(req, res, { target: address }, function(e) {
-      res.end('' + e);
-    });
+    if (address.startsWith('http:')) {
+      proxy.web(req, res, { target: address }, function(e) {
+        res.end('' + e);
+      });
+    } else {
+      let staticServer = staticServers[address];
+      if (staticServer == null) {
+        staticServer = serveStatic(address, {
+          index: ['index.html', 'index.htm']
+        });
+        staticServers[address] = staticServer;
+      }
+      staticServer(req, res);
+    }
   }
 });
 
